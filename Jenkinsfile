@@ -16,7 +16,9 @@ pipeline {
 
         stage('Test in Docker') {
             steps {
-                sh 'docker run --rm my-devops-app:${BUILD_ID}'
+                sh 'docker exec my-devops-app pytest test_app.py'
+                sh 'docker container stop my-devops-app'
+                sh 'docker container rm my-devops-app'
             }
         }
     }
