@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.9-slim'
-            args '-u root'
-        }
-    }
+    agent any
 
     stages {
         stage("Checkout") {
@@ -15,15 +10,13 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    docker.build("my-devops-app:${env.BUILD_ID}")
-                }
+                sh 'docker build -t my-devops-app:${BUILD_ID} .'
             }
         }
 
-        stage('Test') {
+        stage('Test in Docker') {
             steps {
-                sh 'pytest test_app.py'
+                sh 'docker run --rm my-devops-app:${BUILD_ID}'
             }
         }
     }
