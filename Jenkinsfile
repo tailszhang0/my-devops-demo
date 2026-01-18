@@ -39,8 +39,8 @@ pipeline {
         stage('Push Image') {
             steps {
                 sh '''
-                    docker push DOCKERHUB_USER/$IMAGE_NAME:${BUILD_ID}
-                    docker push DOCKERHUB_USER/$IMAGE_NAME:latest
+                    docker push $DOCKERHUB_USER/$IMAGE_NAME:${BUILD_ID}
+                    docker push $DOCKERHUB_USER/$IMAGE_NAME:latest
                 '''
             }
         }
