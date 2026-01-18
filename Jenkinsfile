@@ -17,6 +17,8 @@ pipeline {
             steps {
                 sh 'docker build -t $IMAGE_NAME:${BUILD_ID} .'
                 sh 'docker tag $IMAGE_NAME:${BUILD_ID} $IMAGE_NAME:latest'
+                sh 'docker tag $IMAGE_NAME:${BUILD_ID} $DOCKERHUB_USER/$IMAGE_NAME:${BUILD_ID}'
+                sh 'docker tag $IMAGE_NAME:${BUILD_ID} $DOCKERHUB_USER/$IMAGE_NAME:latest'
             }
         }
 
