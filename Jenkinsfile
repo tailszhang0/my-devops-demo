@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'python:3.11-slim'
+            args '-u root'
+        }
+    }
 
     stages {
         stage("Checkout") {
@@ -10,7 +15,10 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh 'pytest test_app.py'
+                sh '''
+                    pip install -r requirements.txt
+                    pytest test_app.py
+                '''
             }
         }
 
