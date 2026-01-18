@@ -13,17 +13,17 @@ pipeline {
             }
         }
 
-        stage('Test') {
-            steps {
-                sh 'pytest test_app.py'
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 script {
                     docker.build("my-devops-app:${env.BUILD_ID}")
                 }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'pytest test_app.py'
             }
         }
     }
