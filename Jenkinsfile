@@ -15,10 +15,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh '''
-                    pip install -r requirements.txt
-                    pytest test_app.py
-                '''
+                sh 'pytest test_app.py'
             }
         }
 
