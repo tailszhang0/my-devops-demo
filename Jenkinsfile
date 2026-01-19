@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKERHUB_USER = 'tails1982'
         IMAGE_NAME = 'my-devops-app'
-        IMAGE_TAG = '${BUILD_ID}'
+        IMAGE_TAG = "${BUILD_ID}"
     }
 
     stages {
