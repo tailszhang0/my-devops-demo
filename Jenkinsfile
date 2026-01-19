@@ -57,15 +57,24 @@ pipeline {
 
         stage('Update K8s Manifest') {
             steps {
-                sh '''
-                  yq -i '.spec.template.spec.containers[0].image = "'$DOCKERHUB_USER'/'$IMAGE_NAME':'$IMAGE_TAG'"' k8s/deployment.yaml
+                yq -i '.spec.template.spec.containers[0].image = "'$DOCKERHUB_USER'/'$IMAGE_NAME':'$IMAGE_TAG'"' k8s/deployment.yaml
 
-                  git config user.name "jenkins"
-                  git config user.email "jenkins@local"
-                  git add k8s/deployment.yaml
-                  git commit -m "chore: update image to $IMAGE_TAG"
-                  git push origin main
-                '''
+                withCredentials([usernamePassword(
+                    credentialsId: 'git-hub-creds',
+                    usernameVariable: 'GIT_USER',
+                    passwordVariable: 'GIT_TOKEN'
+                )]) {
+                    sh '''
+                      git config user.name "jenkins"
+                      git config user.email "jenkins@local"
+
+                      git remote set-url origin https://${GIT_USER}:${GIT_TOKEN}@github.com/tailszhang0/my-devops-demo.git
+
+                      git add k8s/deployment.yaml
+                      git commit -m "Update image to $IMAGE_TAG"
+                      git push origin main
+                    '''
+                }
             }
         }
     }
