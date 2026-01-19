@@ -58,11 +58,6 @@ pipeline {
         stage('Update K8s Manifest') {
             steps {
                 sh '''
-                  if ! command -v yq >/dev/null 2>&1; then
-                    wget -q https://github.com/mikefarah/yq/releases/download/v4.44.1/yq_linux_amd64 -O /usr/local/bin/yq
-                    chmod +x /usr/local/bin/yq
-                  fi
-
                   yq -i '.spec.template.spec.containers[0].image = "'$DOCKERHUB_USER'/'$IMAGE_NAME':'$IMAGE_TAG'"' k8s/deployment.yaml
 
                   git config user.name "jenkins"
