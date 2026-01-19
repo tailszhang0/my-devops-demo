@@ -48,7 +48,7 @@ pipeline {
 
         stage('Test in Docker') {
             steps {
-                sh 'docker run -d --name my-devops-app -p 5000:5000 $IMAGE_NAME:$IMAGE_TAG'
+                sh 'docker run -d --name my-devops-app -p 5000:5000 $DOCKERHUB_USER/$IMAGE_NAME:$IMAGE_TAG'
                 sh 'docker exec my-devops-app pytest test_app.py'
                 sh 'docker container stop my-devops-app'
                 sh 'docker container rm my-devops-app'
