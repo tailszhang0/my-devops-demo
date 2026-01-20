@@ -30,7 +30,7 @@ pipeline {
 
                   healthy=false
 
-                  for i in {1..10}; do
+                  for i in $(seq 1 10); do
                       if docker exec test-app curl -f http://localhost:5000/health; then
                         healthy=true
                         break
