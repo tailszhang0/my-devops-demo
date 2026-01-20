@@ -21,6 +21,22 @@ pipeline {
             }
         }
 
+        stage('Test in Container') {
+            steps {
+                sh '''
+                  docker run -d --name test-app -p 5000:5000 $IMAGE_NAME:$IMAGE_TAG
+
+                  echo "Waiting for Flask app to start..."
+                  sleep 5
+
+                  docker exec test-app pytest /app/test_app.py
+
+                  docker stop test-app
+                  docker rm test-app
+                '''
+            }
+        }
+
         stage('Login Docker Hub') {
             steps {
                 withCredentials([usernamePassword(
