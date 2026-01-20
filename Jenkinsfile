@@ -29,7 +29,7 @@ pipeline {
                   echo "Waiting for Flask app to start..."
 
                   for i in {1..10}; do
-                      if curl -f http://localhost:5000/health; then
+                      if docker exec test-app curl -f http://localhost:5000/health; then
                         break
                       fi
 
