@@ -24,7 +24,7 @@ pipeline {
         stage('Test in Container') {
             steps {
                 sh '''
-                  docker run -d --name test-app -p 5000:5000 $DOCKERHUB_USER/$IMAGE_NAME:$IMAGE_TAG
+                  docker run --rm -d --name test-app -p 5000:5000 $DOCKERHUB_USER/$IMAGE_NAME:$IMAGE_TAG
 
                   echo "Waiting for Flask app to start..."
 
@@ -100,6 +100,10 @@ pipeline {
                     '''
                 }
             }
+        }
+
+        stage('Clean image') {
+            sh 'docker image rm $DOCKERHUB_USER/$IMAGE_NAME:$IMAGE_TAG'
         }
     }
 }
