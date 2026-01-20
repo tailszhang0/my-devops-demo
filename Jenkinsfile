@@ -24,6 +24,12 @@ pipeline {
         stage('Test in Container') {
             steps {
                 sh '''
+                  cleanup() {
+                    docker rm -f test-app >/dev/null 2>&1 || true
+                  }
+
+                  trap cleanup EXIT
+
                   docker run -d --name test-app -p 5000:5000 $DOCKERHUB_USER/$IMAGE_NAME:$IMAGE_TAG
 
                   echo "Waiting for Flask app to start..."
@@ -47,9 +53,6 @@ pipeline {
                   fi
 
                   docker exec test-app pytest /app/test_app.py
-
-                  docker stop test-app
-                  docker rm test-app
                 '''
             }
         }
