@@ -1,0 +1,57 @@
+precondition:
+1. jenkins is up
+
+2. argocd is up
+kubectl port-forward svc/argocd-server -n argocd 8081:80
+
+quick start:
+kubectl apply -f argocd/my-devops-app-application.yaml
+kubectl port-forward -n default svc/my-devops-app-service 5000:5000
+
+kubectl delete -f argocd/my-devops-app-application.yaml
+note: delete application only delete the application resource. to delete all related resource:
+kubectl get deployment
+kubectl get rs
+kubectl get pod
+kubectl get service
+kubectl delete deployment my-devops-app
+kubectl delete service my-devops-app-service
+
+
+project structure:
+1. app folder
+app.py is the python file which can start a web server and accept web request (http://localhost:5000,
+http://localhost:5000/health)
+test_app.py is a pytest file that is used to test app.py
+
+2. requirements.txt
+requirements.txt contains python packages that will be installed to support app.py and test_app.py.
+it can be installed by command: pip install --no-cache-dir -r requirements.txt
+the installation command will be run when building the docker image (in Dockerfile)
+
+3. Dockerfile:
+Dockerfile is used to build a docker image in which app.py is running.
+build command example: docker build -t my-devops-app .
+
+4. docker-compose.yaml
+a docker compose file that is used to create a docker container, in which app.py is running.
+this file can be used to start container in local environment for test purpose.
+in ci/cd process, the container will be run by k8s.
+command to start: docker compose up -d
+command to shutdown: docker compose down
+
+5. k8s folder
+this folder contains k8s manifest files.
+the image version number in deployment.yaml will be updated on github everytime the jenkins pipeline is run.
+the manifest files can be run using kubectl command for tests purpose.
+run container by k8s command: kubectl apply -f k8s/
+delete resources by k8s command: kubectl delete -f k8s/
+in ci/cd process, the manifest file is run by argocd (argocd/my-devops-app-application.yaml)
+
+6. Jenkinsfile
+this file is used by jenkins pipeline, tell jenkins pipline what to do.
+
+7. argocd folder
+my-devops-app-application.yaml is the application file for argocd. it tells argocd where is the
+source and where is the destination
+
