@@ -103,7 +103,9 @@ pipeline {
         }
 
         stage('Clean image') {
-            sh 'docker image rm $DOCKERHUB_USER/$IMAGE_NAME:$IMAGE_TAG'
+            steps {
+                sh 'docker image rm $DOCKERHUB_USER/$IMAGE_NAME:$IMAGE_TAG'
+            }
         }
     }
 }
