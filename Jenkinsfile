@@ -28,13 +28,23 @@ pipeline {
 
                   echo "Waiting for Flask app to start..."
 
+                  healthy=false
+
                   for i in {1..10}; do
                       if docker exec test-app curl -f http://localhost:5000/health; then
+                        healthy=true
                         break
                       fi
 
                       sleep 1
                   done
+
+                  if [ "$healthy" != "true" ]; then
+                    echo "App failed health check"
+                    docker logs test-app
+
+                    exit 1
+                  fi
 
                   docker exec test-app pytest /app/test_app.py
 
