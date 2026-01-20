@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: my-devops-app
-          image: tails1982/my-devops-app:81
+          image: tails1982/my-devops-app:82
           ports:
             - containerPort: 5000
           readinessProbe:
