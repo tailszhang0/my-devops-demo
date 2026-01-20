@@ -27,7 +27,14 @@ pipeline {
                   docker run -d --name test-app -p 5000:5000 $DOCKERHUB_USER/$IMAGE_NAME:$IMAGE_TAG
 
                   echo "Waiting for Flask app to start..."
-                  sleep 5
+
+                  for i in {1..10}; do
+                      if curl -f http://localhost:5000/health; then
+                        break
+                      fi
+
+                      sleep 1
+                  done
 
                   docker exec test-app pytest /app/test_app.py
 
