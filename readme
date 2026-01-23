@@ -42,8 +42,9 @@ command to shutdown: docker compose down
 
 5. k8s folder
 this folder contains k8s manifest files.
-the image version number in deployment.yaml will be updated on github everytime the jenkins pipeline is run.
-the manifest files can be run using kubectl command for tests purpose.
+the image version number in deployment.yaml will be updated on github everytime the jenkins pipeline is run
+(so argocd can detect the code change in github, and trigger the auto sync.)
+the manifest files can be run by using kubectl command for tests purpose.
 run container by k8s command: kubectl apply -f k8s/
 delete resources by k8s command: kubectl delete -f k8s/
 in ci/cd process, the manifest file is run by argocd (argocd/my-devops-app-application.yaml)
